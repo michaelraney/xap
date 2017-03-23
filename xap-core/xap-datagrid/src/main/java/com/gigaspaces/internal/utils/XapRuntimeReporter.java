@@ -79,11 +79,9 @@ public class XapRuntimeReporter {
         append(PlatformVersion.getOfficialVersion());
         append("    Home: " + systemInfo.getXapHome());
         append("    Lookup Groups: " + systemInfo.lookup().groups());
-        if (systemInfo.getManagerClusterInfo().isEmpty()) {
-            String locators = systemInfo.lookup().locators();
-            append("    Lookup Locators: " + (locators != null ? locators : ""));
-        }
-        else {
+        String locators = systemInfo.lookup().locators();
+        append("    Lookup Locators: " + (locators != null ? locators : ""));
+        if (!systemInfo.getManagerClusterInfo().isEmpty()) {
             append("    Manager Servers: " + systemInfo.getManagerClusterInfo().toString());
         }
 
