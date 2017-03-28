@@ -2336,11 +2336,12 @@ public class JoinManager {
      */
     private void removeTasks(ProxyReg proxyReg) {
         if (proxyReg == null) return;
-        if (taskMgr == null) return;
+        final TaskManager taskMgrRef = taskMgr; //keep ref to taskMgr, is null-ed on terminate
+        if (taskMgrRef == null) return;
         synchronized (proxyReg.taskList) {
             if (proxyReg.proxyRegTask != null) {
-                synchronized (taskMgr) {
-                    taskMgr.remove(proxyReg.proxyRegTask);
+                synchronized (taskMgrRef) {
+                    taskMgrRef.remove(proxyReg.proxyRegTask);
                 }//end sync(taskMgr)
                 proxyReg.proxyRegTask.cancel();//cancel retry in WakeupMgr
                 proxyReg.proxyRegTask = null;  //don't reuse because of seq#
