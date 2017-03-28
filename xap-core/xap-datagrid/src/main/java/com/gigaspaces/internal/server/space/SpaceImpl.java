@@ -3598,16 +3598,9 @@ public class SpaceImpl extends AbstractService implements IRemoteSpace, IInterna
     }
 
     private LeaderSelectorHandler createZooKeeperLeaderSelector() throws ActiveElectionException {
-        int connectionTimeout = _spaceConfig.getZookeeperConnectionTimeout();
-        int sessionTimeout = _spaceConfig.getZookeeperSessionTimeout();
-        int retryTimeout = _spaceConfig.getZookeeperRetryTimeout();
-        int retryInterval = _spaceConfig.getZookeeperRetryInterval();
-
-        final Constructor constructor;
         try {
-            constructor = ClassLoaderHelper.loadLocalClass(LEADER_SELECTOR_HANDLER_CLASS_NAME)
-                    .getConstructor(int.class, int.class, int.class, int.class);
-            return (LeaderSelectorHandler) constructor.newInstance(sessionTimeout, connectionTimeout, retryTimeout, retryInterval);
+            Class clazz = ClassLoaderHelper.loadLocalClass(LEADER_SELECTOR_HANDLER_CLASS_NAME);
+            return (LeaderSelectorHandler) clazz.newInstance();
         } catch (Exception e) {
             if (_logger.isLoggable(Level.SEVERE))
                 _logger.log(Level.SEVERE, "Failed to initialize Leader Selector handler");
